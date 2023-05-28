@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <title>Login | Meus recados</title>
+  </head>
+  <body>
+    <main>
+      <section>
+        <form id="formLogin">
+          <img
+            src="/src/img/cadeado-do-login.png"
+            alt="cadeado"
+            width="50px"
+          />
+
+          <h2>Entrar</h2>
+
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email *"
+            required
+          />
+
+          <input
+            type="password"
+            name="senha"
+            id="senha"
+            placeholder="Senha *"
+            required
+          />
+
+          <div class="input-remember">
+            <input type="checkbox" name="remember" id="remember" />
+            <label for="remember">Lembre-se de Mim</label>
+          </div>
+
+          <button class="btn" type="submit">ENTRAR</button>
+
+          <div class="login-options">
+            <a href="/src/html/cadastro.html">Não tem uma conta? Cadastre-se</a>
+          </div>
+
+          <p>Copyright @ <span>Your Website</span> 2023</p>
+        </form>
+      </section>
+    </main>
+
+    <script src="./src/js/validar-campos.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="./src/js/config-axios.js"></script>
+
+    <script src="./src/js/login.js"></script>
+  </body>
+</html>
