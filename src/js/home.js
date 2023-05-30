@@ -49,7 +49,7 @@ async function getRecados(pagina = 1) {
   function listarRecados(response) {
     let tabela = '';
     document.querySelector('#lista-recados-conteudo').innerHTML = '';
-    response.reverse().forEach(recado => {
+    response.forEach(recado => {
       let colunaTitulo = `<td class="coluna-titulo">${recado.titulo}</td>`;
       let colunaDescricao = `<td class="coluna-descricao">${recado.descricao}</td>`;
       let linha = `<tr>${colunaTitulo}${colunaDescricao}</tr>`;
