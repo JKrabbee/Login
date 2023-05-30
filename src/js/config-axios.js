@@ -1,3 +1,3 @@
 const apiConfig = axios.create({
-    baseURL: 'http://localhost:8090'
+    baseURL: 'https://atividade-final-de-modulo.onrender.com'
 })
