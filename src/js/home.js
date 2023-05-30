@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         return
     }
 
-    getRecados()
+    const response = await getRecados()
+    renderizarPaginacao(response.data.totalPaginas)
 });
 
 // LOGOUT DO USUARIO
@@ -23,64 +24,55 @@ btnSair.addEventListener('click', () => {
     window.location.href = '../../index.html'
 })
 
-let paginaAtual = 1; // Página atual inicial
-const recadosPorPagina = 5; // Quantidade de recados por página
+async function getRecados(pagina = 1) {
+    try {
+      const token = sessionStorage.getItem('token');
+  
+      const response = await apiConfig.get('/recados', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        params: {
+          pagina: pagina
+        }
+      });
+  
+      listarRecados(response.data.dados);
 
-async function getRecados() {
-  try {
-    const token = sessionStorage.getItem('token');
-    const response = await apiConfig.get('/recados', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      return response
+
+    } catch (error) {
+      console.log(error);
+    }
+  }  
+
+  function listarRecados(response) {
+    let tabela = '';
+    document.querySelector('#lista-recados-conteudo').innerHTML = '';
+    response.reverse().forEach(recado => {
+      let colunaTitulo = `<td class="coluna-titulo">${recado.titulo}</td>`;
+      let colunaDescricao = `<td class="coluna-descricao">${recado.descricao}</td>`;
+      let linha = `<tr>${colunaTitulo}${colunaDescricao}</tr>`;
+  
+      tabela += linha;
+  
+      document.querySelector('#lista-recados-conteudo').innerHTML = tabela;
     });
-
-    const recados = response.data.dados.reverse();
-    const paginasTotais = Math.ceil(recados.length / recadosPorPagina);
-
-    mostrarRecados(recados, paginaAtual, paginasTotais);
-
-    console.log(response);
-  } catch (error) {
-    console.log(error);
   }
-}
 
-function mostrarRecados(recados, paginaAtual, paginasTotais) {
-  const indiceInicio = (paginaAtual - 1) * recadosPorPagina;
-  const indiceFim = paginaAtual * recadosPorPagina;
-  const recadosPagina = recados.slice(indiceInicio, indiceFim);
+  function renderizarPaginacao (response) {
 
-  let tabela = '';
+    const paginacao = document.querySelector('#pagination-container')
 
-  recadosPagina.forEach(recado => {
-    let colunaTitulo = `<td class="coluna-titulo">${recado.titulo}</td>`;
-    let colunaDescricao = `<td class="coluna-descricao">${recado.descricao}</td>`;
-    let linha = `<tr>${colunaTitulo}${colunaDescricao}</tr>`;
+    for (let i = 1; i <= response; i++) {
+      const btn = document.createElement('li')
+      
+      btn.innerText = i
 
-    tabela += linha;
-  });
+      btn.addEventListener('click', async () => {
+        await getRecados(i)
+      })
 
-  document.getElementById('lista-recados-conteudo').innerHTML = tabela;
-
-  mostrarPaginacao(paginaAtual, paginasTotais);
-}
-
-function mostrarPaginacao(paginaAtual, paginasTotais) {
-  let paginacao = '';
-
-  for (let pagina = 1; pagina <= paginasTotais; pagina++) {
-    if (pagina === paginaAtual) {
-      paginacao += `<li class="pagina-atual">${pagina}</li>`;
-    } else {
-      paginacao += `<li onclick="selecionarPagina(${pagina})">${pagina}</li>`;
+      paginacao.appendChild(btn)
     }
   }
-
-  document.getElementById('pagination-container').innerHTML = paginacao;
-}
-
-function selecionarPagina(pagina) {
-  paginaAtual = pagina;
-  getRecados();
-}
